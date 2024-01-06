@@ -1,9 +1,7 @@
-import { log } from "@repo/logger";
-import { createServer } from "./server";
+import { Elysia } from "elysia";
 
-const port = process.env.PORT || 5001;
-const server = createServer();
+const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
 
-server.listen(port, () => {
-  log(`api running on ${port}`);
-});
+console.log(
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+);
