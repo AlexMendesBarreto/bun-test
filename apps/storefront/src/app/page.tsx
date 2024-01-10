@@ -1,50 +1,41 @@
 "use client";
 import { CounterButton, Link } from "@repo/ui";
 import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 
-// export const metadata = {
-//   title: "Store | Kitchen Sink",
-// };
+const PROD_URL = "https://bun-api.onrender.com/";
+const DEV_URL = "http://localhost:3000/";
 
 const getPosts = async () => {
   try {
-    const data = await fetch("https://bun-api.onrender.com/")
-    const json = await data.json()
-    return json
-
+    const { data } = await axios.get(DEV_URL)
+    return data
   } catch (err) {
     throw "Fetching posts failed"
   }
 }
 
-
-export default function Store(): JSX.Element {
-  const { data, error } = useQuery({
+function useGetData() {
+  return useQuery({
     queryKey: ['test'],
     queryFn: getPosts,
   })
+}
 
-  console.log(data)
-  console.log({ error })
 
+export default function Store(): JSX.Element {
+  const { data, error, isLoading } = useGetData()
 
   return (
     <div className="container">
-      <h1 className="title">
-        Store <br />
-        <span>Kitchen Sink</span>
-      </h1>
-      <CounterButton />
-      <p className="description">
-        Built With{" "}
-        <Link href="https://turbo.build/repo" newTab>
-          Turborepo
-        </Link>
-        {" & "}
-        <Link href="https://nextjs.org/" newTab>
-          Next.js
-        </Link>
-      </p>
+      {isLoading ? <span>Loading</span> : error ? <span>Error</span> :
+        <>
+          <h1 className="title">
+            {data}
+          </h1>
+          <CounterButton />
+        </>
+      }
     </div>
   );
 }
