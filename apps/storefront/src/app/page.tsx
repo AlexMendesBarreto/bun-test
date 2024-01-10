@@ -8,7 +8,7 @@ const DEV_URL = "http://localhost:3000/";
 
 const getPosts = async () => {
   try {
-    const { data } = await axios.get(DEV_URL)
+    const { data } = await axios.get(PROD_URL)
     return data
   } catch (err) {
     throw "Fetching posts failed"
