@@ -1,12 +1,32 @@
-import { log } from "@repo/logger";
+"use client";
 import { CounterButton, Link } from "@repo/ui";
+import { useQuery } from "@tanstack/react-query";
 
-export const metadata = {
-  title: "Store | Kitchen Sink",
-};
+// export const metadata = {
+//   title: "Store | Kitchen Sink",
+// };
+
+const getPosts = async () => {
+  try {
+    const data = await fetch("https://bun-api.onrender.com/")
+    const json = await data.json()
+    return json
+
+  } catch (err) {
+    throw "Fetching posts failed"
+  }
+}
+
 
 export default function Store(): JSX.Element {
-  log("Hey! This is the Store page.");
+  const { data, error } = useQuery({
+    queryKey: ['test'],
+    queryFn: getPosts,
+  })
+
+  console.log(data)
+  console.log({ error })
+
 
   return (
     <div className="container">
