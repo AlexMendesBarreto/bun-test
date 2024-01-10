@@ -1,30 +1,14 @@
 "use client";
 import { CounterButton, Link } from "@repo/ui";
-import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
+import { useGetData } from "../services/getFromElysia";
+import { useGetData2 } from "../services/getFromNextJS";
 
-const PROD_URL = "https://bun-api.onrender.com/";
-const DEV_URL = "http://localhost:3000/";
-
-const getPosts = async () => {
-  try {
-    const { data } = await axios.get(PROD_URL)
-    return data
-  } catch (err) {
-    throw "Fetching posts failed"
-  }
-}
-
-function useGetData() {
-  return useQuery({
-    queryKey: ['test'],
-    queryFn: getPosts,
-  })
-}
 
 
 export default function Store(): JSX.Element {
   const { data, error, isLoading } = useGetData()
+
+  const { data: data2, error: error2, isLoading: isLoading2 } = useGetData2()
 
   return (
     <div className="container">
@@ -32,6 +16,14 @@ export default function Store(): JSX.Element {
         <>
           <h1 className="title">
             {data}
+          </h1>
+          <CounterButton />
+        </>
+      }
+      {isLoading2 ? <span>Loading</span> : error2 ? <span>Error</span> :
+        <>
+          <h1 className="title">
+            {JSON.stringify(data2)}
           </h1>
           <CounterButton />
         </>
